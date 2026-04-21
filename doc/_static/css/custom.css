@@ -17,3 +17,8 @@
 .btn-neutral {
 	display: none;
 }
+
+/* set width manually - if not, will be rendered to 0px */
+.wy-side-nav-search a img.logo {
+	width: 125px;
+}
