@@ -181,13 +181,13 @@ def do_modules_install():
 
 	LKSSUtil.unmount_rootfs(mount)
 
-def do_init(env: str, force: bool):
+def do_init(env: str, force: bool, config: str):
 	if lkss_env.is_cached() and not force:
 		print("Environment already initialized!")
 		return
 
 	# needs to be done before anything else
-	lkss_env.load_from_config(None)
+	lkss_env.load_from_config(config)
 	lkss_env.data["env"] = env
 	lkss_env.store()
 
@@ -209,6 +209,7 @@ init_parser = subparser.add_parser("init", help="initialize the development envi
 init_parser.add_argument("-e", "--environment", type=str, choices=["native", "docker"],
 						default="native", help="environment to use for development")
 init_parser.add_argument("-f", "--force", action="store_true", help="force the initialization")
+init_parser.add_argument("-c", "--config", help="configuration file to use")
 
 subparser.add_parser("update", help="update the repositories/binaries")
 subparser.add_parser("boot", help="boot the board")
@@ -235,7 +236,7 @@ args = parser.parse_args()
 
 match args.command:
 	case "init":
-		do_init(args.environment, args.force)
+		do_init(args.environment, args.force, args.config)
 	case "update":
 		LKSSManifest().update()
 	case "compile":
