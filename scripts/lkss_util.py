@@ -12,27 +12,6 @@ import shutil
 import pickle
 import shlex
 
-class LKSSConfig:
-	FILEPATH = ".lkss"
-
-	def __init__(self, data=dict()):
-		self.data = data
-
-	@staticmethod
-	def exists():
-		return os.path.isfile(LKSSConfig.FILEPATH)
-
-	@staticmethod
-	def load():
-		with open(LKSSConfig.FILEPATH, "rb") as fd:
-			data = pickle.load(fd)
-
-		return LKSSConfig(data=data)
-
-	def store(self):
-		with open(LKSSConfig.FILEPATH, "wb") as fd:
-			pickle.dump(self.data, fd)
-
 class LKSSDocker:
 	COMPOSE = "docker/compose.yaml"
 	SERVICE = "lkss"
@@ -151,18 +130,17 @@ class LKSSUtil:
 			return
 
 	@staticmethod
-	def copy_to_rootfs(rootfs_fpath: str, src_fpath: str, dst_fpath: str):
-		mount_fpath = os.path.join(os.getcwd(), LKSS_ENV["ROOTFS_MOUNT_DIR"])
-		dst = os.path.join(mount_fpath, dst_fpath.lstrip("/"))
+	def copy_to_rootfs(mount: str, rootfs_fpath: str, src_fpath: str, dst_fpath: str):
+		dst = os.path.join(mount, dst_fpath.lstrip("/"))
 
 		print(f"Attempting to recursively copy {src_fpath} to {dst}")
 
-		if not LKSSUtil.mount_rootfs(rootfs_fpath, mount_fpath):
+		if not LKSSUtil.mount_rootfs(rootfs_fpath, mount):
 			print("Failed to mount rootfs")
 			return
 
 		LKSSUtil.__copy_file(src_fpath, dst)
 
-		if not LKSSUtil.unmount_rootfs(mount_fpath):
+		if not LKSSUtil.unmount_rootfs(mount):
 			print("Failed to unmount rootfs")
 			return

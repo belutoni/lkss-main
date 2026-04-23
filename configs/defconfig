@@ -1,0 +1,38 @@
+# default directory for output products
+OUTPUT_DIR = "output"
+
+# default directory for cloning the repositories
+REPOS_DIR = "repos"
+
+# default directory for downloading the binaries
+BINARIES_DIR = "bin"
+
+# default directory in which the rootfs will be temporarily mounted
+ROOTFS_MOUNT_DIR = ".rootfs_mnt"
+
+# name of the linux repository
+LINUX_DIR = "lkss-linux"
+
+# name of the Linux kernel DTB
+DTB_NAME = "imx93-11x11-frdm.dtb"
+
+# name of the Linux kernel defconfig
+DEFCONFIG_NAME = "imx93frdm_lkss_defconfig"
+
+# name of the boot container
+BOOT_CONTAINER_NAME = "flash.bin"
+
+# path to the uuu script to use for booting the board
+BOOT_SCRIPT_PATH = "./scripts/boot/uuu_script"
+
+# name of the manifest file
+MANIFEST_FILE = "lkss.yaml"
+
+# name of the rootfs
+ROOTFS_NAME = "rootfs"
+
+# name of the uuu executable (unix)
+UNIX_UUU_NAME = "uuu"
+
+# name of the uuu executable (windows)
+WINDOWS_UUU_NAME = "uuu.exe"

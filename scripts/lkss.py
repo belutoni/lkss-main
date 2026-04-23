@@ -12,8 +12,8 @@ import sys
 import shlex
 
 from lkss_manifest import LKSSManifest
-from lkss_util import LKSSUtil, LKSSDocker, LKSSConfig
-from lkss_env import LKSS_ENV
+from lkss_util import LKSSUtil, LKSSDocker
+from lkss_env import env as lkss_env
 
 def compile_docker(command: str, kernel: str, image: str,
 					dtb: str, output: str, clean_config: bool):
@@ -23,7 +23,7 @@ def compile_docker(command: str, kernel: str, image: str,
 
 	# set the configuration if need be
 	if clean_config:
-		LKSSDocker.run(command + LKSS_ENV["DEFCONFIG_NAME"], oneshot=False)
+		LKSSDocker.run(command + lkss_env.data["DEFCONFIG_NAME"], oneshot=False)
 
 	# build the kernel
 	LKSSDocker.run(command, oneshot=False)
@@ -42,7 +42,7 @@ def compile_native(command: str, kernel: str, image: str,
 					dtb: str, output: str, clean_config: bool):
 	# set the configuration if need be
 	if clean_config:
-		proc = subprocess.run(shlex.split(command + LKSS_ENV["DEFCONFIG_NAME"]))
+		proc = subprocess.run(shlex.split(command + lkss_env.data["DEFCONFIG_NAME"]))
 		if proc.returncode != 0:
 			print("Failed to set configuration")
 			return
@@ -66,7 +66,7 @@ def menuconfig_docker(command: str, clean_config: bool):
 		return
 
 	if clean_config:
-		LKSSDocker.run(command + LKSS_ENV["DEFCONFIG_NAME"], oneshot=False)
+		LKSSDocker.run(command + lkss_env.data["DEFCONFIG_NAME"], oneshot=False)
 
 	# open the menuconfig interface
 	LKSSDocker.run(command + "menuconfig", oneshot=False)
@@ -77,7 +77,7 @@ def menuconfig_docker(command: str, clean_config: bool):
 def menuconfig_native(command: str, clean_config: bool):
 	# set the configuration if need be
 	if clean_config:
-		proc = subprocess.run(shlex.split(command + LKSS_ENV["DEFCONFIG_NAME"]))
+		proc = subprocess.run(shlex.split(command + lkss_env.data["DEFCONFIG_NAME"]))
 		if proc.returncode != 0:
 			print("Failed to set configuration")
 			return
@@ -89,58 +89,56 @@ def menuconfig_native(command: str, clean_config: bool):
 		return
 
 def do_menuconfig(clean_config: bool):
-	if not LKSSConfig.exists():
+	if not lkss_env.is_cached():
 		print("No configuration file found - have you run init?")
 		return
 
-	kernel = os.path.join(LKSS_ENV["REPOS_DIR"], LKSS_ENV["LINUX_DIR"])
+	kernel = os.path.join(lkss_env.data["REPOS_DIR"], lkss_env.data["LINUX_DIR"])
 	command = f"make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -C {kernel} "
-	env = LKSSConfig.load().data["env"]
 
-	if env == "docker":
+	if lkss_env.data["env"] == "docker":
 		menuconfig_docker(command, clean_config)
 	else:
 		menuconfig_native(command, clean_config)
 
 
 def do_compile(jobs: int, install_modules: bool, clean_config: bool):
-	if not LKSSConfig.exists():
+	if not lkss_env.is_cached():
 		print("No configuration file found - have you run init?")
 		return
 
-	kernel = os.path.join(LKSS_ENV["REPOS_DIR"], LKSS_ENV["LINUX_DIR"])
+	kernel = os.path.join(lkss_env.data["REPOS_DIR"], lkss_env.data["LINUX_DIR"])
 	image = os.path.join(kernel, "arch/arm64/boot/Image")
-	dtb = os.path.join(kernel, "arch/arm64/boot/dts/freescale", LKSS_ENV["DTB_NAME"])
-	env = LKSSConfig.load().data["env"]
+	dtb = os.path.join(kernel, "arch/arm64/boot/dts/freescale", lkss_env.data["DTB_NAME"])
 
 	command = f"make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -C {kernel} "
 
 	if jobs:
 		command += f"-j{jobs} "
 
-	if env == "docker":
-		compile_docker(command, kernel, image, dtb, LKSS_ENV["OUTPUT_DIR"], clean_config)
+	if lkss_env.data["env"] == "docker":
+		compile_docker(command, kernel, image, dtb, lkss_env.data["OUTPUT_DIR"], clean_config)
 	else:
-		compile_native(command, kernel, image, dtb, LKSS_ENV["OUTPUT_DIR"], clean_config)
+		compile_native(command, kernel, image, dtb, lkss_env.data["OUTPUT_DIR"], clean_config)
 
 	if install_modules:
 		do_modules_install()
 
 def do_boot():
-	bin_path = os.path.join(os.getcwd(), LKSS_ENV["BINARIES_DIR"])
-	output_path = os.path.join(os.getcwd(), LKSS_ENV["OUTPUT_DIR"])
+	bin_path = os.path.join(os.getcwd(), lkss_env.data["BINARIES_DIR"])
+	output_path = os.path.join(os.getcwd(), lkss_env.data["OUTPUT_DIR"])
 
 	# assemble paths for all required binaries
-	rootfs = os.path.join(bin_path, LKSS_ENV["ROOTFS_NAME"])
+	rootfs = os.path.join(bin_path, lkss_env.data["ROOTFS_NAME"])
 	image = os.path.join(output_path, "Image")
-	dtb = os.path.join(output_path, LKSS_ENV["DTB_NAME"])
-	container = os.path.join(bin_path, LKSS_ENV["BOOT_CONTAINER_NAME"])
-	script = LKSS_ENV["BOOT_SCRIPT_PATH"]
+	dtb = os.path.join(output_path, lkss_env.data["DTB_NAME"])
+	container = os.path.join(bin_path, lkss_env.data["BOOT_CONTAINER_NAME"])
+	script = lkss_env.data["BOOT_SCRIPT_PATH"]
 
 	if LKSSUtil.platform_name() == "WSL":
-		uuu = os.path.join(bin_path, LKSS_ENV["WINDOWS_UUU_NAME"])
+		uuu = os.path.join(bin_path, lkss_env.data["WINDOWS_UUU_NAME"])
 	else:
-		uuu = os.path.join(bin_path, LKSS_ENV["UNIX_UUU_NAME"])
+		uuu = os.path.join(bin_path, lkss_env.data["UNIX_UUU_NAME"])
 
 	binaries = [rootfs, image, dtb, container, script, uuu]
 
@@ -162,13 +160,14 @@ def do_boot():
 		return
 
 def do_copy(src_fpath: str, dst_fpath: str):
-	rootfs = os.path.join(os.getcwd(), LKSS_ENV["BINARIES_DIR"], LKSS_ENV["ROOTFS_NAME"])
-	LKSSUtil.copy_to_rootfs(rootfs, src_fpath, dst_fpath)
+	rootfs = os.path.join(os.getcwd(), lkss_env.data["BINARIES_DIR"], lkss_env.data["ROOTFS_NAME"])
+	mount = os.path.join(os.getcwd(), lkss_env.data["ROOTFS_MOUNT_DIR"])
+	LKSSUtil.copy_to_rootfs(mount, rootfs, src_fpath, dst_fpath)
 
 def do_modules_install():
-	kernel = os.path.join(os.getcwd(), LKSS_ENV["REPOS_DIR"], LKSS_ENV["LINUX_DIR"])
-	rootfs = os.path.join(os.getcwd(), LKSS_ENV["BINARIES_DIR"], LKSS_ENV["ROOTFS_NAME"])
-	mount = os.path.join(os.getcwd(), LKSS_ENV["ROOTFS_MOUNT_DIR"])
+	kernel = os.path.join(os.getcwd(), lkss_env.data["REPOS_DIR"], lkss_env.data["LINUX_DIR"])
+	rootfs = os.path.join(os.getcwd(), lkss_env.data["BINARIES_DIR"], lkss_env.data["ROOTFS_NAME"])
+	mount = os.path.join(os.getcwd(), lkss_env.data["ROOTFS_MOUNT_DIR"])
 
 	if not LKSSUtil.mount_rootfs(rootfs, mount):
 		print("Failed to mount rootfs")
@@ -183,18 +182,19 @@ def do_modules_install():
 	LKSSUtil.unmount_rootfs(mount)
 
 def do_init(env: str, force: bool):
-	if LKSSConfig.exists() and not force:
+	if lkss_env.is_cached() and not force:
 		print("Environment already initialized!")
 		return
+
+	# needs to be done before anything else
+	lkss_env.load_from_config(None)
+	lkss_env.data["env"] = env
+	lkss_env.store()
 
 	LKSSManifest().init()
 
 	if env == "docker":
 		LKSSDocker.build()
-
-	config = LKSSConfig()
-	config.data["env"] = env
-	config.store()
 
 if LKSSUtil.platform_name() == "WINDOWS":
 	print("Native Windows not supported - please run in WSL")

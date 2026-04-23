@@ -8,7 +8,7 @@ import os
 import yaml
 
 from lkss_util import LKSSUtil
-from lkss_env import LKSS_ENV
+from lkss_env import env as lkss_env
 
 class LKSSRepository:
 	@staticmethod
@@ -197,14 +197,14 @@ class LKSSBinary:
 
 class LKSSManifest:
 	def __init__(self):
-		with open(LKSS_ENV["MANIFEST_FILE"]) as fd:
+		with open(lkss_env.data["MANIFEST_FILE"]) as fd:
 			raw_content = fd.read()
 
 			# before loading the YAML file, we need to perform a fixup
 			# meaning we replace all the environment variables with the
-			# corresponding values from LKSS_ENV
+			# corresponding values from the environment
 
-			for var, val in LKSS_ENV.items():
+			for var, val in lkss_env.data.items():
 				raw_content = raw_content.replace(f"${var}", f"{val}")
 
 			self.content = yaml.safe_load(raw_content)
@@ -216,13 +216,13 @@ class LKSSManifest:
 
 		if "repositories" in self.content and self.content["repositories"] is not None:
 			for repo in self.content["repositories"]:
-				LKSSRepository.clone(repo, LKSS_ENV["REPOS_DIR"])
+				LKSSRepository.clone(repo, lkss_env.data["REPOS_DIR"])
 		else:
 			print("No repositories in manifest file - skip init")
 
 		if "binaries" in self.content and self.content["binaries"] is not None:
 			for binary in self.content["binaries"]:
-				LKSSBinary.download(binary, LKSS_ENV["BINARIES_DIR"])
+				LKSSBinary.download(binary, lkss_env.data["BINARIES_DIR"])
 		else:
 			print("No binaries in manifest file - skip init")
 
@@ -233,7 +233,7 @@ class LKSSManifest:
 
 		if "repositories" in self.content and self.content["repositories"] is not None:
 			for repo in self.content["repositories"]:
-				LKSSRepository.update(repo, LKSS_ENV["REPOS_DIR"])
+				LKSSRepository.update(repo, lkss_env.data["REPOS_DIR"])
 		else:
 			print("No repositories in manifest file - skip update")
 
@@ -242,6 +242,6 @@ class LKSSManifest:
 			print("Updating binaries will overwrite existing ones!")
 
 			for binary in self.content["binaries"]:
-				LKSSBinary.update(binary, LKSS_ENV["BINARIES_DIR"])
+				LKSSBinary.update(binary, lkss_env.data["BINARIES_DIR"])
 		else:
 			print("No binaries in manifest file - skip update")

@@ -2,37 +2,46 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-# contains various environemnt variables used throughout the scripts
-LKSS_ENV = {
-	# default directory for output products
-	"OUTPUT_DIR": "output",
-	# default directory for cloning the repositories
-	"REPOS_DIR": "repos",
-	# default directory for downloading the binaries
-	"BINARIES_DIR": "bin",
-	# default directory in which the rootfs will be temporarily mounted
-	"ROOTFS_MOUNT_DIR": ".rootfs_mnt",
-	# name of the linux repository
-	"LINUX_DIR": "lkss-linux",
+import os
+import dotenv
+import pickle
 
-	# name of the Linux kernel DTB
-	"DTB_NAME": "imx93-11x11-frdm.dtb",
-	# name of the Linux kernel defconfig
-	"DEFCONFIG_NAME": "imx93frdm_lkss_defconfig",
+from dotenv import dotenv_values
 
-	# name of the boot container
-	"BOOT_CONTAINER_NAME": "flash.bin",
-	# path to the uuu script to use for booting the board
-	"BOOT_SCRIPT_PATH": "./scripts/boot/uuu_script",
+class LKSSEnvironment:
+	DEFCONFIG = "./configs/defconfig"
+	CACHE = ".lkss"
 
-	# name of the manifest file
-	"MANIFEST_FILE": "lkss.yaml",
+	def __init__(self):
+		# was the environment cached?
+		if not os.path.isfile(LKSSEnvironment.CACHE):
+			self.data = dict()
+			return
 
-	# name of the rootfs
-	"ROOTFS_NAME": "rootfs",
+		# yes, load it
+		with open(LKSSEnvironment.CACHE, "rb") as fd:
+			self.data = pickle.load(fd)
 
-	# name of the uuu executable (unix)
-	"UNIX_UUU_NAME": "uuu",
-	# name of the uuu executable (windows)
-	"WINDOWS_UUU_NAME": "uuu.exe",
-}
+	def load_from_config(self, config: str):
+		if not config:
+			config = LKSSEnvironment.DEFCONFIG
+
+		if not os.path.isfile(config):
+			raise FileNotFoundError(f"File {config} not found")
+
+		print(f"Using {config} to initialize environment...")
+
+		self.data = dotenv_values(config)
+
+	def store(self):
+		with open(LKSSEnvironment.CACHE, "wb") as fd:
+			pickle.dump(self.data, fd)
+
+	def getvar(self, key: str):
+		return self.data[key]
+
+	@staticmethod
+	def is_cached():
+		return os.path.isfile(LKSSEnvironment.CACHE)
+
+env = LKSSEnvironment()
