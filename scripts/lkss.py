@@ -4,12 +4,12 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-import argparse
 import os
 import subprocess
 import shutil
 import sys
 import shlex
+import click
 
 from lkss_manifest import LKSSManifest
 from lkss_util import LKSSUtil, LKSSDocker
@@ -88,7 +88,17 @@ def menuconfig_native(command: str, clean_config: bool):
 		print("Failed to open menuconfig")
 		return
 
-def do_menuconfig(clean_config: bool):
+@click.group(context_settings={"help_option_names": ["-h", "--help"]})
+def cli():
+	"""LKSS utility tool"""
+	if LKSSUtil.platform_name() == "WINDOWS":
+		print("Native Windows not supported - please run in WSL")
+		return
+
+@cli.command()
+@click.option("--clean-config", is_flag=True, help="Set the configuration options to the defconfig values.")
+def menuconfig(clean_config: bool):
+	"""Open the menuconfig interface"""
 	if not lkss_env.is_cached():
 		print("No configuration file found - have you run init?")
 		return
@@ -96,13 +106,17 @@ def do_menuconfig(clean_config: bool):
 	kernel = os.path.join(lkss_env.data["REPOS_DIR"], lkss_env.data["LINUX_DIR"])
 	command = f"make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -C {kernel} "
 
-	if lkss_env.data["env"] == "docker":
+	if lkss_env.data["RUNNER"] == "docker":
 		menuconfig_docker(command, clean_config)
 	else:
 		menuconfig_native(command, clean_config)
 
-
-def do_compile(jobs: int, install_modules: bool, clean_config: bool):
+@cli.command()
+@click.option("-j", "--jobs", default=0, help="Number of threads to use.")
+@click.option("--install-modules", is_flag=True, help="Copy the kernel modules to the rootfs.")
+@click.option("--clean-config", is_flag=True, help="Set the configuration options to the defconfig values.")
+def compile(jobs: int, install_modules: bool, clean_config: bool):
+	"""Compile the Linux kernel"""
 	if not lkss_env.is_cached():
 		print("No configuration file found - have you run init?")
 		return
@@ -116,7 +130,7 @@ def do_compile(jobs: int, install_modules: bool, clean_config: bool):
 	if jobs:
 		command += f"-j{jobs} "
 
-	if lkss_env.data["env"] == "docker":
+	if lkss_env.data["RUNNER"] == "docker":
 		compile_docker(command, kernel, image, dtb, lkss_env.data["OUTPUT_DIR"], clean_config)
 	else:
 		compile_native(command, kernel, image, dtb, lkss_env.data["OUTPUT_DIR"], clean_config)
@@ -124,7 +138,9 @@ def do_compile(jobs: int, install_modules: bool, clean_config: bool):
 	if install_modules:
 		do_modules_install()
 
-def do_boot():
+@cli.command()
+def boot():
+	"""Boot the board"""
 	bin_path = os.path.join(os.getcwd(), lkss_env.data["BINARIES_DIR"])
 	output_path = os.path.join(os.getcwd(), lkss_env.data["OUTPUT_DIR"])
 
@@ -159,10 +175,16 @@ def do_boot():
 		print("Failed to boot the board")
 		return
 
-def do_copy(src_fpath: str, dst_fpath: str):
+@cli.command()
+@click.argument("src")
+@click.argument("dst")
+def copy(src: str, dst: str):
+	"""
+	Copy file/directory (recursively) found at SRC to rootfs DST
+	"""
 	rootfs = os.path.join(os.getcwd(), lkss_env.data["BINARIES_DIR"], lkss_env.data["ROOTFS_NAME"])
 	mount = os.path.join(os.getcwd(), lkss_env.data["ROOTFS_MOUNT_DIR"])
-	LKSSUtil.copy_to_rootfs(mount, rootfs, src_fpath, dst_fpath)
+	LKSSUtil.copy_to_rootfs(mount, rootfs, src, dst)
 
 def do_modules_install():
 	kernel = os.path.join(os.getcwd(), lkss_env.data["REPOS_DIR"], lkss_env.data["LINUX_DIR"])
@@ -181,69 +203,29 @@ def do_modules_install():
 
 	LKSSUtil.unmount_rootfs(mount)
 
-def do_init(env: str, force: bool, config: str):
+@cli.command()
+@click.option("-f", "--force", is_flag=True, help="Force the initialization.")
+@click.option("--config", help="Configuration file to use.")
+@click.option(
+	"--runner",
+	type=click.Choice(["native", "docker"]),
+	help="environment to use for development"
+)
+def init(runner: str, force: bool, config: str):
+	"""Initialize the development environment"""
 	if lkss_env.is_cached() and not force:
 		print("Environment already initialized!")
 		return
 
 	# needs to be done before anything else
 	lkss_env.load_from_config(config)
-	lkss_env.data["env"] = env
+	lkss_env.data["RUNNER"] = runner
 	lkss_env.store()
 
 	LKSSManifest().init()
 
-	if env == "docker":
+	if runner == "docker":
 		LKSSDocker.build()
 
-if LKSSUtil.platform_name() == "WINDOWS":
-	print("Native Windows not supported - please run in WSL")
-	sys.exit(1)
-
-parser = argparse.ArgumentParser(description="LKSS utility tool")
-subparser = parser.add_subparsers(dest="command",
-								title="commands",
-								help="command to execute")
-
-init_parser = subparser.add_parser("init", help="initialize the development environment")
-init_parser.add_argument("-e", "--environment", type=str, choices=["native", "docker"],
-						default="native", help="environment to use for development")
-init_parser.add_argument("-f", "--force", action="store_true", help="force the initialization")
-init_parser.add_argument("-c", "--config", help="configuration file to use")
-
-subparser.add_parser("update", help="update the repositories/binaries")
-subparser.add_parser("boot", help="boot the board")
-
-compile_parser = subparser.add_parser("compile", help="compile the Linux kernel")
-compile_parser.add_argument("-j", "--jobs", default=0,
-							type=int,
-							help="number of threads to use (see make -j argument)")
-compile_parser.add_argument("--install-modules", action="store_true",
-							help="copy the kernel modules to rootfs")
-compile_parser.add_argument("--clean-config", action="store_true",
-							help="set the configuration options to the defconfig values")
-
-copy_parser = subparser.add_parser("copy", help="copy file or directory (recursively) to rootfs")
-copy_parser.add_argument("src", type=str, help="source file or directory")
-copy_parser.add_argument("dst", type=str,
-						help="destination file or directory (relative to rootfs)")
-
-menucfg_parser = subparser.add_parser("menuconfig", help="open the menuconfig interface")
-menucfg_parser.add_argument("--clean-config", action="store_true",
-							help="set the configuration options to the defconfig values")
-
-args = parser.parse_args()
-
-match args.command:
-	case "init":
-		do_init(args.environment, args.force, args.config)
-	case "update":
-		LKSSManifest().update()
-	case "compile":
-		do_compile(args.jobs, args.install_modules, args.clean_config)
-	case "boot":
-		do_boot()
-	case "copy":
-		do_copy(args.src, args.dst)
-	case "menuconfig":
-		do_menuconfig(args.clean_config)
+if __name__ == '__main__':
+    cli()
