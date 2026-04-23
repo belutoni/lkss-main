@@ -22,8 +22,8 @@ LKSS_ENV = {
 
 	# name of the boot container
 	"BOOT_CONTAINER_NAME": "flash.bin",
-	# name of the boot script
-	"BOOT_SCRIPT_NAME": "uuu_script",
+	# path to the uuu script to use for booting the board
+	"BOOT_SCRIPT_PATH": "./scripts/boot/uuu_script",
 
 	# name of the manifest file
 	"MANIFEST_FILE": "lkss.yaml",

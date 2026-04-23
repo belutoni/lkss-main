@@ -135,7 +135,7 @@ def do_boot():
 	image = os.path.join(output_path, "Image")
 	dtb = os.path.join(output_path, LKSS_ENV["DTB_NAME"])
 	container = os.path.join(bin_path, LKSS_ENV["BOOT_CONTAINER_NAME"])
-	script = os.path.join(bin_path, LKSS_ENV["BOOT_SCRIPT_NAME"])
+	script = LKSS_ENV["BOOT_SCRIPT_PATH"]
 
 	if LKSSUtil.platform_name() == "WSL":
 		uuu = os.path.join(bin_path, LKSS_ENV["WINDOWS_UUU_NAME"])
@@ -151,6 +151,8 @@ def do_boot():
 
 	# uuu binary might not have X bit set, do it now
 	LKSSUtil.set_executable(uuu)
+
+	print(f"Booting the board using {script}")
 
 	command = [uuu, "-b", script, container, rootfs, image, dtb]
 
