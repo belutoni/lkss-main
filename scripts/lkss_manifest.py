@@ -203,8 +203,7 @@ class LKSSManifest:
 
 			# before loading the YAML file, we need to perform a fixup
 			# meaning we replace all the environment variables with the
-			# corresponding values from the environment
-
+			# corresponding values from the LKSS environment
 			for var, val in lkss_env.data.items():
 				raw_content = raw_content.replace(f"${var}", f"{val}")
 
