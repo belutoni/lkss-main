@@ -12,81 +12,10 @@ import shlex
 import click
 
 from lkss_manifest import LKSSManifest
-from lkss_util import LKSSUtil, LKSSDocker
+from lkss_util import LKSSUtil
 from lkss_env import env as lkss_env
 
-def compile_docker(command: str, kernel: str, image: str,
-					dtb: str, output: str, clean_config: bool):
-	if not LKSSDocker.start():
-		print("Failed to start docker container")
-		return
-
-	# set the configuration if need be
-	if clean_config:
-		LKSSDocker.run(command + lkss_env.data["DEFCONFIG_NAME"], oneshot=False)
-
-	# build the kernel
-	LKSSDocker.run(command, oneshot=False)
-
-	# done with docker - shut it down
-	LKSSDocker.shutdown()
-
-	# done, create output directory and copy Image/DTB
-	if not os.path.isdir(output):
-		os.makedirs(output)
-
-	shutil.copy(image, output)
-	shutil.copy(dtb, output)
-
-def compile_native(command: str, kernel: str, image: str,
-					dtb: str, output: str, clean_config: bool):
-	# set the configuration if need be
-	if clean_config:
-		proc = subprocess.run(shlex.split(command + lkss_env.data["DEFCONFIG_NAME"]))
-		if proc.returncode != 0:
-			print("Failed to set configuration")
-			return
-
-	# build the kernel
-	proc = subprocess.run(shlex.split(command))
-	if proc.returncode != 0:
-		print("Failed to build the kernel")
-		return
-
-	# done, copy resulting image and DTB to output directory
-	if not os.path.isdir(output):
-		os.makedirs(output)
-
-	shutil.copy(image, output)
-	shutil.copy(dtb, output)
-
-def menuconfig_docker(command: str, clean_config: bool):
-	if not LKSSDocker.start():
-		print("Failed to start docker container")
-		return
-
-	if clean_config:
-		LKSSDocker.run(command + lkss_env.data["DEFCONFIG_NAME"], oneshot=False)
-
-	# open the menuconfig interface
-	LKSSDocker.run(command + "menuconfig", oneshot=False)
-
-	# done with docker - shut it down
-	LKSSDocker.shutdown()
-
-def menuconfig_native(command: str, clean_config: bool):
-	# set the configuration if need be
-	if clean_config:
-		proc = subprocess.run(shlex.split(command + lkss_env.data["DEFCONFIG_NAME"]))
-		if proc.returncode != 0:
-			print("Failed to set configuration")
-			return
-
-	# open the menuconfig interface
-	proc = subprocess.run(shlex.split(command + "menuconfig"))
-	if proc.returncode != 0:
-		print("Failed to open menuconfig")
-		return
+from lkss_runner import lkss_get_runner
 
 @click.group(context_settings={"help_option_names": ["-h", "--help"]})
 def cli():
@@ -106,10 +35,12 @@ def menuconfig(clean_config: bool):
 	kernel = os.path.join(lkss_env.data["REPOS_DIR"], lkss_env.data["LINUX_DIR"])
 	command = f"make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -C {kernel} "
 
-	if lkss_env.data["RUNNER"] == "docker":
-		menuconfig_docker(command, clean_config)
+	if clean_config:
+		commands = [command + lkss_env.data["DEFCONFIG_NAME"], command + "menuconfig"]
 	else:
-		menuconfig_native(command, clean_config)
+		commands = [command + "menuconfig"]
+
+	lkss_get_runner(lkss_env.data["RUNNER"]).run_batch(commands)
 
 @cli.command()
 @click.option("-j", "--jobs", default=0, help="Number of threads to use.")
@@ -126,14 +57,22 @@ def compile(jobs: int, install_modules: bool, clean_config: bool):
 	dtb = os.path.join(kernel, "arch/arm64/boot/dts/freescale", lkss_env.data["DTB_NAME"])
 
 	command = f"make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -C {kernel} "
-
 	if jobs:
 		command += f"-j{jobs} "
 
-	if lkss_env.data["RUNNER"] == "docker":
-		compile_docker(command, kernel, image, dtb, lkss_env.data["OUTPUT_DIR"], clean_config)
+	if clean_config:
+		commands = [command + lkss_env.data["DEFCONFIG_NAME"], command]
 	else:
-		compile_native(command, kernel, image, dtb, lkss_env.data["OUTPUT_DIR"], clean_config)
+		commands = [command]
+
+	lkss_get_runner(lkss_env.data["RUNNER"]).run_batch(commands)
+
+	# done, create output directory and copy Image/DTB
+	if not os.path.isdir(lkss_env.data["OUTPUT_DIR"]):
+		os.makedirs(lkss_env.data["OUTPUT_DIR"])
+
+	shutil.copy(image, lkss_env.data["OUTPUT_DIR"])
+	shutil.copy(dtb, lkss_env.data["OUTPUT_DIR"])
 
 	if install_modules:
 		do_modules_install()
@@ -209,6 +148,7 @@ def do_modules_install():
 @click.option(
 	"--runner",
 	type=click.Choice(["native", "docker"]),
+	default="native",
 	help="environment to use for development"
 )
 def init(runner: str, force: bool, config: str):
@@ -224,8 +164,7 @@ def init(runner: str, force: bool, config: str):
 
 	LKSSManifest().init()
 
-	if runner == "docker":
-		LKSSDocker.build()
+	lkss_get_runner(runner).setup()
 
 if __name__ == '__main__':
     cli()

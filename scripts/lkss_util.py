@@ -12,63 +12,6 @@ import shutil
 import pickle
 import shlex
 
-class LKSSDocker:
-	COMPOSE = "docker/compose.yaml"
-	SERVICE = "lkss"
-
-	@staticmethod
-	def build():
-		uid = os.getuid()
-		gid = os.getgid()
-
-		command = f"docker compose -f {LKSSDocker.COMPOSE} " +\
-					f"build --build-arg UID={uid} --build-arg GID={gid}"
-
-		print(command)
-
-		proc = subprocess.run(shlex.split(command))
-		if proc.returncode != 0:
-			print("Failed to build docker image")
-			return
-
-	@staticmethod
-	def start():
-		command = ["docker", "compose", "-f", LKSSDocker.COMPOSE, "up", "--detach"]
-
-		proc = subprocess.run(command)
-		if proc.returncode != 0:
-			print("Failed to start container")
-			return False
-
-		return True
-
-	@staticmethod
-	def shutdown():
-		command = ["docker", "compose", "-f", LKSSDocker.COMPOSE, "down"]
-
-		proc = subprocess.run(command)
-		if proc.returncode != 0:
-			print("Failed to shutdown container")
-			return
-
-	@staticmethod
-	def run(command: str, oneshot=True):
-		if oneshot:
-			self.start()
-
-		command = ["docker", "compose", "-f", LKSSDocker.COMPOSE,
-					"exec", LKSSDocker.SERVICE, "bash",  "-c", f"{command}"]
-
-		proc = subprocess.run(command)
-		if proc.returncode != 0:
-			print("Failed to execute command")
-			return False
-
-		if oneshot:
-			self.shutdown()
-
-		return True
-
 class LKSSUtil:
 	@staticmethod
 	def platform_name() -> str:
