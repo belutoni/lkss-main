@@ -22,15 +22,15 @@ def cli():
 	"""LKSS utility tool"""
 	if LKSSUtil.platform_name() == "WINDOWS":
 		print("Native Windows not supported - please run in WSL")
-		return
+		sys.exit(1)
 
 @cli.command()
 @click.option("--clean-config", is_flag=True, help="Set the configuration options to the defconfig values.")
 def menuconfig(clean_config: bool):
 	"""Open the menuconfig interface"""
 	if not lkss_env.is_cached():
-		print("No configuration file found - have you run init?")
-		return
+		print("Environment not initialized")
+		sys.exit(1)
 
 	kernel = os.path.join(lkss_env.data["REPOS_DIR"], lkss_env.data["LINUX_DIR"])
 	command = f"make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -C {kernel} "
@@ -49,8 +49,8 @@ def menuconfig(clean_config: bool):
 def compile(jobs: int, install_modules: bool, clean_config: bool):
 	"""Compile the Linux kernel"""
 	if not lkss_env.is_cached():
-		print("No configuration file found - have you run init?")
-		return
+		print("Environment not initialized")
+		sys.exit(1)
 
 	kernel = os.path.join(lkss_env.data["REPOS_DIR"], lkss_env.data["LINUX_DIR"])
 	image = os.path.join(kernel, "arch/arm64/boot/Image")
@@ -78,6 +78,10 @@ def compile(jobs: int, install_modules: bool, clean_config: bool):
 @cli.command()
 def boot():
 	"""Boot the board"""
+	if not lkss_env.is_cached():
+		print("Environment not initialized")
+		sys.exit(1)
+
 	bin_path = os.path.join(os.getcwd(), lkss_env.data["BINARIES_DIR"])
 	output_path = os.path.join(os.getcwd(), lkss_env.data["OUTPUT_DIR"])
 
@@ -110,7 +114,7 @@ def boot():
 	proc = subprocess.run(command)
 	if proc.returncode != 0:
 		print("Failed to boot the board")
-		return
+		sys.exit(1)
 
 @cli.command()
 @click.argument("src")
@@ -119,6 +123,10 @@ def copy(src: str, dst: str):
 	"""
 	Copy file/directory (recursively) found at SRC to rootfs DST
 	"""
+	if not lkss_env.is_cached():
+		print("Environment not initialized")
+		sys.exit(1)
+
 	rootfs = os.path.join(os.getcwd(), lkss_env.data["BINARIES_DIR"], lkss_env.data["ROOTFS_NAME"])
 	mount = os.path.join(os.getcwd(), lkss_env.data["ROOTFS_MOUNT_DIR"])
 	LKSSUtil.copy_to_rootfs(mount, rootfs, src, dst)
@@ -130,13 +138,15 @@ def do_modules_install():
 
 	if not LKSSUtil.mount_rootfs(rootfs, mount):
 		print("Failed to mount rootfs")
-		return
+		sys.exit(1)
 
 	command = ["sudo", f"INSTALL_MOD_PATH={mount}", "make", "modules_install"]
 
 	proc = subprocess.run(command, cwd=kernel)
 	if proc.returncode != 0:
 		print("Failed to install modules")
+		LKSSUtil.unmount_rootfs(mount)
+		sys.exit(1)
 
 	LKSSUtil.unmount_rootfs(mount)
 
@@ -153,7 +163,7 @@ def init(runner: str, force: bool, config: str):
 	"""Initialize the development environment"""
 	if lkss_env.is_cached() and not force:
 		print("Environment already initialized!")
-		return
+		sys.exit(1)
 
 	# needs to be done before anything else
 	lkss_env.load_from_config(config)
