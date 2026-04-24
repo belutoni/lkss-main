@@ -73,21 +73,21 @@ class LKSSDockerRunner(LKSSRunner):
 
 		proc = subprocess.run(shlex.split(command))
 		if proc.returncode != 0:
-			raise RuntimeError(f"Failed to build the docker image")
+			raise RuntimeError("Failed to build the docker image")
 
 	def start(self):
 		command = f"docker compose -f {LKSSDockerRunner.COMPOSE} up --detach"
 
 		proc = subprocess.run(shlex.split(command))
 		if proc.returncode != 0:
-			raise RuntimeError(f"Failed to start the docker container")
+			raise RuntimeError("Failed to start the docker container")
 
 	def shutdown(self):
 		command = f"docker compose -f {LKSSDockerRunner.COMPOSE} down"
 
 		proc = subprocess.run(shlex.split(command))
 		if proc.returncode != 0:
-			raise RuntimeError(f"Failed to shutdown the docker container")
+			raise RuntimeError("Failed to shutdown the docker container")
 
 	def run(self, command: str, oneshot=True):
 		if oneshot:
