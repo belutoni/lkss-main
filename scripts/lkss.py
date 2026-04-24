@@ -17,7 +17,7 @@ from lkss_env import env as lkss_env
 
 from lkss_runner import lkss_get_runner
 
-@click.group(context_settings={"help_option_names": ["-h", "--help"]})
+@click.group(context_settings={"help_option_names": ["-h", "--help"], "show_default": True})
 def cli():
 	"""LKSS utility tool"""
 	if LKSSUtil.platform_name() == "WINDOWS":
