@@ -43,7 +43,7 @@ def menuconfig(clean_config: bool):
 	lkss_get_runner(lkss_env.data["RUNNER"]).run_batch(commands)
 
 @cli.command()
-@click.option("-j", "--jobs", default=0, help="Number of threads to use.")
+@click.option("-j", "--jobs", default=1, help="Number of threads to use.")
 @click.option("--install-modules", is_flag=True, help="Copy the kernel modules to the rootfs.")
 @click.option("--clean-config", is_flag=True, help="Set the configuration options to the defconfig values.")
 def compile(jobs: int, install_modules: bool, clean_config: bool):
@@ -56,9 +56,7 @@ def compile(jobs: int, install_modules: bool, clean_config: bool):
 	image = os.path.join(kernel, "arch/arm64/boot/Image")
 	dtb = os.path.join(kernel, "arch/arm64/boot/dts/freescale", lkss_env.data["DTB_NAME"])
 
-	command = f"make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -C {kernel} "
-	if jobs:
-		command += f"-j{jobs} "
+	command = f"make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -C {kernel} -j{jobs}"
 
 	if clean_config:
 		commands = [command + lkss_env.data["DEFCONFIG_NAME"], command]
