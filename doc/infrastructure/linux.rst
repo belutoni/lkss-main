@@ -47,7 +47,7 @@ Preparing the python environment
 Since the utility scripts are based on python, we're going to have to
 prepare the python environment before proceeding. First, we'll have to
 create a virtual environment. If you already have one, then make sure
-to source it before proceeding. Otherwise:
+to activate it before proceeding. Otherwise:
 
 .. code-block:: bash
 
@@ -124,7 +124,7 @@ Summary
 
    git clone https://github.com/NXP-Research/lkss-main && cd lkss-main
 
-3. Create and source the python virtual environment (recommended):
+3. Create and activate the python virtual environment (recommended):
 
 .. code-block:: bash
 
@@ -148,7 +148,7 @@ Docker development
 Prerequisites
 ~~~~~~~~~~~~~
 
-To get started, we're going to have to install `docker`_. To do so, follow
+To get started, we're going to have to install `Docker`_. To do so, follow
 `these instructions <https://docs.docker.com/engine/install/ubuntu/>`__.
 
 .. warning::
@@ -157,7 +157,7 @@ To get started, we're going to have to install `docker`_. To do so, follow
    already be covered by the instructions linked above.
 
 To make sure everything went smoothly with the installation, you can try to
-run the **hello-world** docker image as indicated by the documentation:
+run the **hello-world** Docker image as indicated by the documentation:
 
 .. code-block:: bash
 
@@ -166,7 +166,7 @@ run the **hello-world** docker image as indicated by the documentation:
 Docker environment initialization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-With docker installed, we can now proceed with the environment initialization:
+With Docker installed, we can now proceed with the environment initialization:
 
 .. code-block:: bash
 
@@ -192,11 +192,11 @@ With docker installed, we can now proceed with the environment initialization:
 
    You should see the **docker** group being listed there.
 
-   You may need to resart your computer if the changes don't take effect
+   You may need to restart your computer if the changes don't take effect
    after logging out and logging back in.
 
 If all commands issued so far have returned successfully, your environment
-should now be prepared for docker development.
+should now be prepared for Docker development.
 
 Summary
 ~~~~~~~
@@ -215,7 +215,7 @@ Summary
 
    git clone https://github.com/NXP-Research/lkss-main && cd lkss-main
 
-3. Create and source the python virtual environment (recommended):
+3. Create and activate the python virtual environment (recommended):
 
 .. code-block:: bash
 
@@ -227,7 +227,7 @@ Summary
 
    pip install -r requirements.txt
 
-5. Install docker by following the steps from `here <https://docs.docker.com/engine/install/ubuntu/>`__.
+5. Install Docker by following the steps from `here <https://docs.docker.com/engine/install/ubuntu/>`__.
 
 6. Initialize the environment:
 
@@ -253,4 +253,4 @@ compiling the kernel. To do so, run:
 .. [#] The version shouldn't matter but, ideally, it should be a newer one.
 
 .. _apt: https://en.wikipedia.org/wiki/APT_(software)
-.. _docker: https://www.docker.com/
+.. _Docker: https://www.docker.com/
