@@ -5,6 +5,7 @@
 import os
 import subprocess
 import shlex
+import shutil
 
 from abc import ABC, abstractmethod
 
@@ -60,6 +61,10 @@ class LKSSDockerRunner(LKSSRunner):
 	def setup(self):
 		uid = os.getuid()
 		gid = os.getgid()
+
+		# was docker installed?
+		if not shutil.which("docker"):
+			raise RuntimeError("Unable to find docker - please install it")
 
 		command = f"docker compose -f {LKSSDockerRunner.COMPOSE} " +\
 			f"build --build-arg UID={uid} --build-arg GID={gid}"
