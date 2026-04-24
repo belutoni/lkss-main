@@ -82,7 +82,7 @@ To do so, run:
 
 .. code-block:: bash
 
-   ./scripts/lkss.py init -e native -f
+   ./scripts/lkss.py init --runner native -f
 
 If all commands issued so far have returned successfully, your environment
 should now be prepared for native development.
@@ -123,7 +123,7 @@ Summary
 
 .. code-block:: bash
 
-   ./scripts/lkss.py init -e native -f
+   ./scripts/lkss.py init --runner native -f
 
 Docker development
 ------------------
