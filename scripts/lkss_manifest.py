@@ -7,7 +7,8 @@ import requests
 import os
 import yaml
 
-from lkss_util import LKSSUtil
+import lkss_util
+
 from lkss_env import env as lkss_env
 
 class LKSSRepository:
@@ -126,7 +127,7 @@ class LKSSBinary:
 	# does the variant match the development environment?
 	@staticmethod
 	def variant_matches(variant: dict):
-		return variant["platform"].upper() == LKSSUtil.platform_name()
+		return variant["platform"].upper() == lkss_util.platform_name()
 
 	@staticmethod
 	def get_url(binary: dict):
