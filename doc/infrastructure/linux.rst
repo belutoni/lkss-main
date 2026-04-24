@@ -5,6 +5,13 @@
 Preparing the environment (Linux)
 =================================
 
+.. contents::
+   :depth: 2
+   :local:
+
+About
+-----
+
 This page describes the steps required for setting up the development infrastructure
 on a Linux-based machine.
 
@@ -34,6 +41,39 @@ To clone the project repository:
 
    git clone https://github.com/NXP-Research/lkss-main && cd lkss-main
 
+Preparing the python environment
+--------------------------------
+
+Since the utility scripts are based on python, we're going to have to
+prepare the python environment before proceeding. First, we'll have to
+create a virtual environment. If you already have one, then make sure
+to source it before proceeding. Otherwise:
+
+.. code-block:: bash
+
+   # create the virtual environment
+   python3 -m venv ./.venv
+
+   # activate the virtual environment
+   source ./.venv/bin/activate
+
+.. warning::
+
+   Make sure you always activate the virtual environment after opening a
+   new terminal session.
+
+After activating the environment, your bash prompt should look like this:
+
+.. code-block:: text
+
+   (.venv) lmc@playground:~/work/repos/lkss-main$
+
+With this out of the way, we can now install the required python packages:
+
+.. code-block:: bash
+
+   pip install -r requirements.txt
+
 Native development
 ------------------
 
@@ -49,29 +89,6 @@ can be installed by running:
    sudo apt-get install -y build-essential libncurses-dev bc \
                            flex bison libssl-dev \
                            libelf-dev gcc-aarch64-linux-gnu
-
-After cloning the repository and installing the system packages, we need
-to install some additional python packages.
-
-.. note::
-
-   It is recommended that you install the python packages in a virtual
-   environment. If you already have one then please make sure to source
-   it before proceeding. Otherwise:
-
-   .. code-block:: bash
-
-      # create the virtual environment
-      python3 -m venv ./.venv
-
-      # activate the virtual environment
-      source ./.venv/bin/activate
-
-To install the python packages:
-
-.. code-block:: bash
-
-   pip install -r requirements.txt
 
 Native environment initialization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -128,6 +145,97 @@ Summary
 Docker development
 ------------------
 
+Prerequisites
+~~~~~~~~~~~~~
+
+To get started, we're going to have to install `docker`_. To do so, follow
+`these instructions <https://docs.docker.com/engine/install/ubuntu/>`__.
+
+.. warning::
+
+   Make sure you also install **docker-compose-plugin**. This package should
+   already be covered by the instructions linked above.
+
+To make sure everything went smoothly with the installation, you can try to
+run the **hello-world** docker image as indicated by the documentation:
+
+.. code-block:: bash
+
+   sudo docker run hello-world
+
+Docker environment initialization
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+With docker installed, we can now proceed with the environment initialization:
+
+.. code-block:: bash
+
+   ./scripts/lkss.py init --runner docker -f
+
+.. warning::
+
+   If you get an error similar to:
+
+   .. code-block:: text
+
+      docker permission denied while trying to connect to the docker API at unix:///var/run/docker.sock
+
+   during the initialization, please make sure you follow the steps described
+   `here <https://docs.docker.com/engine/install/linux-postinstall/>`__ to
+   add your user to the **docker** group.
+
+   To test if the changes were successful, you can run:
+
+   .. code-block:: bash
+
+      id -nG
+
+   You should see the **docker** group being listed there.
+
+   You may need to resart your computer if the changes don't take effect
+   after logging out and logging back in.
+
+If all commands issued so far have returned successfully, your environment
+should now be prepared for docker development.
+
+Summary
+~~~~~~~
+
+1. Install the system packages:
+
+.. code-block:: bash
+
+   sudo apt-get update
+   sudo apt-get install -y git minicom python3-venv python3 python3-pip
+
+
+2. Clone the repository:
+
+.. code-block:: bash
+
+   git clone https://github.com/NXP-Research/lkss-main && cd lkss-main
+
+3. Create and source the python virtual environment (recommended):
+
+.. code-block:: bash
+
+   python3 -m venv ./.venv && source ./.venv/bin/activate
+
+4. Install the python packages:
+
+.. code-block:: bash
+
+   pip install -r requirements.txt
+
+5. Install docker by following the steps from `here <https://docs.docker.com/engine/install/ubuntu/>`__.
+
+6. Initialize the environment:
+
+.. code-block:: bash
+
+   ./scripts/lkss.py init --runner docker -f
+
+
 Testing the environment
 -----------------------
 
@@ -145,3 +253,4 @@ compiling the kernel. To do so, run:
 .. [#] The version shouldn't matter but, ideally, it should be a newer one.
 
 .. _apt: https://en.wikipedia.org/wiki/APT_(software)
+.. _docker: https://www.docker.com/
