@@ -57,6 +57,11 @@ def compile(jobs: int, install_modules: bool, clean_config: bool):
 	image = os.path.join(kernel, "arch/arm64/boot/Image")
 	dtb = os.path.join(kernel, "arch/arm64/boot/dts/freescale", lkss_env.data["DTB_NAME"])
 
+	# check if .config is present - if not, most likely, the user forgot to set it
+	if not os.path.isfile(os.path.join(kernel, ".config")) and not clean_config:
+		print("Kernel configuration not set - please run using the --clean-config flag")
+		sys.exit(1)
+
 	command = f"make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -C {kernel} -j{jobs} "
 
 	if clean_config:
