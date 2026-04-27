@@ -41,6 +41,8 @@ To clone the project repository:
 
    git clone https://github.com/NXP-Research/lkss-main && cd lkss-main
 
+.. _linux-preparing-the-python-environment:
+
 Preparing the python environment
 --------------------------------
 
@@ -73,6 +75,8 @@ With this out of the way, we can now install the required python packages:
 .. code-block:: bash
 
    pip install -r requirements.txt
+
+.. _linux-native-development:
 
 Native development
 ------------------
