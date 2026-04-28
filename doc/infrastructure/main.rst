@@ -52,4 +52,6 @@ support for virtualized environments (WSL not included) has been completely
 dropped. However, if you **must** use a virtualized environment, please contact
 the :ref:`team <team>` before the event starts so that we can find a solution.
 
+.. rubric:: Footnotes
+
 .. [#] Environments not present in this list are considered unsupported.

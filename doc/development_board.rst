@@ -22,6 +22,8 @@ A top view of the board is shown in :numref:`frdm-imx93-top-view`.
 
    Top view of the FRDM-IMX93 board [#]_
 
+.. _frdm-imx93-usb-c-ports-section:
+
 The USB-C ports
 ---------------
 
@@ -40,6 +42,8 @@ Each of the three USB-C ports serves a different purpose, as described below:
 1. **BOOT USB**: used to load the images required during the board's boot process.
 2. **POWER USB**: used to supply power to the board.
 3. **DEBUG USB**: used for debugging and communicating with the bootloader [#]_.
+
+.. _frdm-imx93-boot-switch-section:
 
 The boot switch
 ---------------
