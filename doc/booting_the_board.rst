@@ -202,7 +202,7 @@ on your host computer. To do so:
 
             sudo minicom -D /dev/ttyACM0
 
-      #. Open the **help** menu by pressing **CTRL-a Z**:A
+      #. Open the **help** menu by pressing **CTRL-a Z**:
 
           .. image:: _static/figures/LINUX-MINICOM-HELP.png
              :align: center
@@ -256,7 +256,7 @@ on your host computer. To do so:
             :align: center
             :scale: 40
 
-      #. Type in **COM3** as the serial device name and then click **Open**:
+      #. Enter **COM3** as the serial device name and then click **Open**:
 
          .. image:: _static/figures/WINDOWS-PUTTY-SERIAL-DEV.png
             :align: center
@@ -308,8 +308,8 @@ serial console as shown in :numref:`frdm-imx93-boot-windows-putty` or
 .. tip::
 
    If your serial console is not displaying any logs, try using the other
-   one. For Linux, that would be **ttyACM1** and for Windows, that would be
-   **COM4**.
+   serial device. For Linux, that would be **ttyACM1** and for Windows, that
+   would be **COM4**.
 
 .. rubric:: Footnotes
 
