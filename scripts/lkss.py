@@ -115,7 +115,7 @@ def boot():
 
 	print(f"Booting the board using {script}")
 
-	command = [uuu, "-b", script, container, rootfs, image, dtb]
+	command = ["sudo", uuu, "-b", script, container, rootfs, image, dtb]
 
 	proc = subprocess.run(command)
 	if proc.returncode != 0:
