@@ -107,7 +107,7 @@ def boot():
 
 	for binary in binaries:
 		if not os.path.isfile(binary):
-			print(f"{binary} not present - have you ran init?")
+			print(f"{binary} not found")
 			return
 
 	# uuu binary might not have X bit set, do it now
