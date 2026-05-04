@@ -123,6 +123,17 @@ def boot():
 		sys.exit(1)
 
 @cli.command()
+def update():
+	"""
+	Update the repositories/binaries
+	"""
+	if not lkss_env.is_cached():
+		print("Environment not initialized")
+		sys.exit(1)
+
+	LKSSManifest().update()
+
+@cli.command()
 @click.argument("src")
 @click.argument("dst")
 def copy(src: str, dst: str):
