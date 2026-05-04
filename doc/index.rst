@@ -16,7 +16,7 @@ Getting started
 
 Check out the following resources to help you get started:
 
-- :ref:`Preparing the development environment <infrastructure>`
+- :ref:`Infrastructure main page <infrastructure>`
 - :ref:`Getting acquainted with the FRDM-IMX93 board <development_board>`
 - :ref:`Booting the FRDM-IMX93 board <booting_the_board>`
 

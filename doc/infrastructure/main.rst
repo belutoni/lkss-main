@@ -1,7 +1,7 @@
 .. _infrastructure:
 
-Preparing the environment
-=========================
+Infrastructure
+==============
 
 Supported environments
 ----------------------
@@ -51,6 +51,14 @@ Due to many USB-related issues occuring during the board boot process,
 support for virtualized environments (WSL not included) has been completely
 dropped. However, if you **must** use a virtualized environment, please contact
 the :ref:`team <team>` before the event starts so that we can find a solution.
+
+Tools
+-----
+
+.. toctree::
+   :maxdepth: 1
+
+   tools/lkss
 
 .. rubric:: Footnotes
 
