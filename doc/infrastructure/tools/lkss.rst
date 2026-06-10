@@ -198,6 +198,8 @@ For example:
 
 will copy **lkss.yaml** to **/lib/** inside the rootfs.
 
+.. _lkss_cheatsheet:
+
 Cheatsheet
 ----------
 

@@ -35,7 +35,7 @@ Schedule
      - Daniel Baluta
 
    * - 30.06.2026, 16:30 - 20:00
-     - TODO
+     - :ref:`char_devs_gpios_irqs`
      - Simona Toaca
 
    * - 01.07.2026, 16:30 - 20:00

@@ -72,6 +72,8 @@ board (i.e. D1) should be turned on as shown in :numref:`lkss-daughter-board-pow
 
    Accessory board power LED
 
+.. _lkss_daughter_board_design_files:
+
 Design files
 ------------
 
