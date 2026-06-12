@@ -1,7 +1,7 @@
-.. _booting_the_board:
+.. _frdm_imx93_booting:
 
-Booting the board
-=================
+Booting the FRDM-IMX93 board
+============================
 
 This page describes the steps required for booting the Linux kernel on the
 FRDM-IMX93 board.
@@ -11,7 +11,7 @@ Prerequisites
 
 Before proceeding, make sure you prepare your development environment by following
 the steps described :ref:`here <infrastructure>`. Additionally, please make sure
-you also read :ref:`this <development_board>` page to get acquainted with the
+you also read :ref:`this <frdm_imx93>` page to get acquainted with the
 FRDM-IMX93 board.
 
 Hardware setup
@@ -38,7 +38,7 @@ First, connect the **DEBUG USB** port to your computer as shown in
 
 .. _frdm-imx93-debug-usb-connection:
 
-.. figure:: _static/figures/FRDM-IMX93-DEBUG-USB-CONNECTION.png
+.. figure:: ../_static/figures/FRDM-IMX93-DEBUG-USB-CONNECTION.png
    :align: center
    :scale: 40
 
@@ -53,7 +53,7 @@ To make sure the connection was successful, you can:
       Run ``sudo dmesg`` in your terminal. Look for the following logs
       (or something similar):
 
-      .. image:: _static/figures/FRDM-IMX93-DEBUG-USB-LINUX.png
+      .. image:: ../_static/figures/FRDM-IMX93-DEBUG-USB-LINUX.png
          :align: center
          :scale: 40
 
@@ -64,13 +64,13 @@ To make sure the connection was successful, you can:
 
       #. Open up **Device Manager**:
 
-         .. image:: _static/figures/WINDOWS-DEVICE-MANAGER.png
+         .. image:: ../_static/figures/WINDOWS-DEVICE-MANAGER.png
             :align: center
             :scale: 40
 
       #. Look for and open the **Ports (COM & LPT)** tab:
 
-         .. image:: _static/figures/WINDOWS-DEVICE-MANAGER-PORTS.png
+         .. image:: ../_static/figures/WINDOWS-DEVICE-MANAGER-PORTS.png
             :align: center
             :scale: 40
 
@@ -84,7 +84,7 @@ Now, connect the **POWER USB** to a power source [#]_ as shown in
 
 .. _frdm-imx93-power-usb-connection:
 
-.. figure:: _static/figures/FRDM-IMX93-POWER-USB-CONNECTION.png
+.. figure:: ../_static/figures/FRDM-IMX93-POWER-USB-CONNECTION.png
    :align: center
    :scale: 40
 
@@ -100,7 +100,7 @@ Finally, connect the **BOOT USB** as shown in :numref:`frdm-imx93-boot-usb-conne
 
 .. _frdm-imx93-boot-usb-connection:
 
-.. figure:: _static/figures/FRDM-IMX93-BOOT-USB-CONNECTION.png
+.. figure:: ../_static/figures/FRDM-IMX93-BOOT-USB-CONNECTION.png
    :align: center
    :scale: 40
 
@@ -115,7 +115,7 @@ To make sure the connection was successful, you can:
       Run ``sudo dmesg`` in your terminal. Look for the following logs
       (or something similar):
 
-      .. image:: _static/figures/FRDM-IMX93-BOOT-USB-LINUX.png
+      .. image:: ../_static/figures/FRDM-IMX93-BOOT-USB-LINUX.png
          :align: center
          :scale: 40
 
@@ -126,13 +126,13 @@ To make sure the connection was successful, you can:
 
       #. Open up **Device Manager**:
 
-         .. image:: _static/figures/WINDOWS-DEVICE-MANAGER.png
+         .. image:: ../_static/figures/WINDOWS-DEVICE-MANAGER.png
             :align: center
             :scale: 40
 
       #. Look for and open the **Human Interface Devices** tab:
 
-         .. image:: _static/figures/WINDOWS-DEVICE-MANAGER-HID.png
+         .. image:: ../_static/figures/WINDOWS-DEVICE-MANAGER-HID.png
             :align: center
             :scale: 40
 
@@ -141,13 +141,13 @@ To make sure the connection was successful, you can:
 
       #. Open the **Properties** tab by right-clicking on the device:
 
-         .. image:: _static/figures/WINDOWS-DEVICE-MANAGER-HID-USB-PROPERTIES.png
+         .. image:: ../_static/figures/WINDOWS-DEVICE-MANAGER-HID-USB-PROPERTIES.png
             :align: center
             :scale: 40
 
       #. Go to the **Details** tab and select the **Hardware Ids** property:
 
-         .. image:: _static/figures/WINDOWS-DEVICE-MANAGER-HID-HW-IDS.png
+         .. image:: ../_static/figures/WINDOWS-DEVICE-MANAGER-HID-HW-IDS.png
             :align: center
             :scale: 40
 
@@ -204,31 +204,31 @@ on your host computer. To do so:
 
       #. Open the **help** menu by pressing **CTRL-a Z**:
 
-          .. image:: _static/figures/LINUX-MINICOM-HELP.png
+          .. image:: ../_static/figures/LINUX-MINICOM-HELP.png
              :align: center
              :scale: 40
 
       #. Open the **cOnfigure Minicom** menu by pressing **O** (capital letter):
 
-         .. image:: _static/figures/LINUX-MINICOM-CFG.png
+         .. image:: ../_static/figures/LINUX-MINICOM-CFG.png
             :align: center
             :scale: 40
 
       #. Open the **Serial port setup** menu by using the arrow and **Enter** keys:
 
-         .. image:: _static/figures/LINUX-MINICOM-SERIAL-SETUP.png
+         .. image:: ../_static/figures/LINUX-MINICOM-SERIAL-SETUP.png
             :align: center
             :scale: 40
 
       #. Make sure **Hardware Flow Control** is set to **No**:
 
-         .. image:: _static/figures/LINUX-MINICOM-SERIAL-SETUP-HFC.png
+         .. image:: ../_static/figures/LINUX-MINICOM-SERIAL-SETUP-HFC.png
             :align: center
             :scale: 40
 
       #. Make sure **Bps/Par/Bits** is set to **115200 8N1**:
 
-         .. image:: _static/figures/LINUX-MINICOM-SERIAL-SETUP-PROTO.png
+         .. image:: ../_static/figures/LINUX-MINICOM-SERIAL-SETUP-PROTO.png
             :align: center
             :scale: 40
 
@@ -240,25 +240,25 @@ on your host computer. To do so:
 
       #. Open **PuTTY**:
 
-         .. image:: _static/figures/WINDOWS-PUTTY.png
+         .. image:: ../_static/figures/WINDOWS-PUTTY.png
             :align: center
             :scale: 30
 
       #. Select the **Serial** connection type:
 
-         .. image:: _static/figures/WINDOWS-PUTTY-SERIAL.png
+         .. image:: ../_static/figures/WINDOWS-PUTTY-SERIAL.png
             :align: center
             :scale: 40
 
       #. Set the speed to **115200**:
 
-         .. image:: _static/figures/WINDOWS-PUTTY-SERIAL-SPEED.png
+         .. image:: ../_static/figures/WINDOWS-PUTTY-SERIAL-SPEED.png
             :align: center
             :scale: 40
 
       #. Enter **COM3** as the serial device name and then click **Open**:
 
-         .. image:: _static/figures/WINDOWS-PUTTY-SERIAL-DEV.png
+         .. image:: ../_static/figures/WINDOWS-PUTTY-SERIAL-DEV.png
             :align: center
             :scale: 40
 
@@ -279,7 +279,7 @@ To boot the board, run:
 
 If the command was successful, you should see the following output in your terminal:
 
-.. figure:: _static/figures/LKSS-BOOT-COMMAND-SUCCESS.png
+.. figure:: ../_static/figures/LKSS-BOOT-COMMAND-SUCCESS.png
    :align: center
    :scale: 40
 
@@ -289,7 +289,7 @@ serial console as shown in :numref:`frdm-imx93-boot-windows-putty` or
 
 .. _frdm-imx93-boot-windows-putty:
 
-.. figure:: _static/figures/LKSS-BOOT-WINDOWS-PUTTY.png
+.. figure:: ../_static/figures/LKSS-BOOT-WINDOWS-PUTTY.png
    :align: center
    :scale: 40
 
@@ -298,7 +298,7 @@ serial console as shown in :numref:`frdm-imx93-boot-windows-putty` or
 
 .. _frdm-imx93-boot-linux-minicom:
 
-.. figure:: _static/figures/LKSS-BOOT-LINUX-MINICOM.png
+.. figure:: ../_static/figures/LKSS-BOOT-LINUX-MINICOM.png
    :align: center
    :scale: 20
 

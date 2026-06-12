@@ -17,8 +17,7 @@ Getting started
 Check out the following resources to help you get started:
 
 - :ref:`Infrastructure main page <infrastructure>`
-- :ref:`Getting acquainted with the FRDM-IMX93 board <development_board>`
-- :ref:`Booting the FRDM-IMX93 board <booting_the_board>`
+- :ref:`Supported boards <supported_boards>`
 
 .. _team:
 
@@ -62,8 +61,7 @@ students to try to fix the issues themselves by submitting a pull request.
    :caption: Getting started
 
    infrastructure/main
-   development_board
-   booting_the_board
+   supported_boards
 
 .. toctree::
    :maxdepth: 1

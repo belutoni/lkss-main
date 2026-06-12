@@ -1,7 +1,7 @@
-.. _development_board:
+.. _frdm_imx93:
 
-The development board
-=====================
+FRDM-IMX93
+==========
 
 `FRDM-IMX93`_ is a small and compact board developed by NXP, which integrates
 the `i.MX93`_ chip and offers the following hardware features [#]_:
@@ -17,7 +17,7 @@ A top view of the board is shown in :numref:`frdm-imx93-top-view`.
 
 .. _frdm-imx93-top-view:
 
-.. figure:: _static/figures/FRDM-IMX93-TOP-VIEW.png
+.. figure:: ../_static/figures/FRDM-IMX93-TOP-VIEW.png
    :align: center
 
    Top view of the FRDM-IMX93 board [#]_
@@ -32,7 +32,7 @@ ports, which are highlighted in :numref:`frdm-imx93-usb-c-ports`.
 
 .. _frdm-imx93-usb-c-ports:
 
-.. figure:: _static/figures/FRDM-IMX93-USB-C-PORTS.png
+.. figure:: ../_static/figures/FRDM-IMX93-USB-C-PORTS.png
    :align: center
 
    FRDM-IMX93 USB-C ports
@@ -56,7 +56,7 @@ using yellow.
 
 .. _frdm-imx93-boot-switch:
 
-.. figure:: _static/figures/FRDM-IMX93-BOOT-SWITCH.png
+.. figure:: ../_static/figures/FRDM-IMX93-BOOT-SWITCH.png
    :align: center
 
    FRDM-IMX93 boot switch location
@@ -103,7 +103,7 @@ and is highlighted in :numref:`frdm-imx93-expansion-hdr`.
 
 .. _frdm-imx93-expansion-hdr:
 
-.. figure:: _static/figures/FRDM-IMX93-EXPANSION-HDR.png
+.. figure:: ../_static/figures/FRDM-IMX93-EXPANSION-HDR.png
    :align: center
 
    FRDM-IMX93 expansion header
@@ -114,7 +114,7 @@ expansion header.
 
 .. _frdm-imx93-expansion-hdr-schematic:
 
-.. figure:: _static/figures/FRDM-IMX93-EXPANSION-HDR-SCHEMATIC.png
+.. figure:: ../_static/figures/FRDM-IMX93-EXPANSION-HDR-SCHEMATIC.png
    :align: center
 
    FRDM-IMX93 expansion header schematic [#]_
@@ -127,7 +127,7 @@ bottom part of the expansion header. This is highlighted in
 
 .. _frdm-imx93-expansion-hdr-bottom:
 
-.. figure:: _static/figures/FRDM-IMX93-EXPANSION-HDR-BOTTOM.png
+.. figure:: ../_static/figures/FRDM-IMX93-EXPANSION-HDR-BOTTOM.png
    :align: center
 
    FRDM-IMX93 expansion header (bottom view) [#]_
@@ -139,7 +139,7 @@ this corresponds to pin 1 [#]_. Its location is shown in
 
 .. _frdm-imx93-expansion-hdr-bottom-pin1:
 
-.. figure:: _static/figures/FRDM-IMX93-EXPANSION-HDR-BOTTOM-PIN1.png
+.. figure:: ../_static/figures/FRDM-IMX93-EXPANSION-HDR-BOTTOM-PIN1.png
    :align: center
 
    FRDM-IMX93 expansion header pin 1 location (bottom view)

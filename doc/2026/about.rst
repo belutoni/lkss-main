@@ -3,6 +3,12 @@ About this year's edition
 
 TODO
 
+Supported boards
+----------------
+
+This year's edition is based on the :ref:`FRDM-IMX93 <frdm-imx93-board-info>` board and the
+:ref:`LKSS-DAUGHTER-BOARD <lkss-daughter-board-info>` accessory board.
+
 Schedule
 --------
 

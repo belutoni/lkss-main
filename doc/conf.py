@@ -20,7 +20,8 @@ numfig = True
 
 extensions = [
 	'sphinx_copybutton',
-	'sphinx_tabs.tabs'
+	'sphinx_tabs.tabs',
+	'sphinx_design'
 ]
 
 # same formatting you'd see in LATEX
