@@ -41,8 +41,8 @@ Check out the list of supported accessory boards:
    :height: 30px
    :class: no-scaled-link
 
-Resources
----------
+Useful resources
+----------------
 
 .. toctree::
    :maxdepth: 1
