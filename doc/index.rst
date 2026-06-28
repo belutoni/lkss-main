@@ -9,7 +9,12 @@ Welcome to NXP's Linux Kernel Summer School!
 About
 -----
 
-TODO
+The Linux Kernel Summer School is a hands-on course run by NXP engineers.
+Over a series of days, it takes students from the fundamentals of the Linux
+kernel to writing and debugging real device drivers on the i.MX93 FRDM board.
+Each day pairs a short lecture with a guided lab, so every concept is put into
+practice right away. The only prerequisite is the curiosity to explore what
+happens under the hood.
 
 Getting started
 ---------------
@@ -40,6 +45,9 @@ Team
 
    * - Simona Toaca
      - simona.toaca@nxp.com
+
+   * - Iuliana Prodan
+     - iuliana.prodan@nxp.com
 
 Contributing
 ------------
