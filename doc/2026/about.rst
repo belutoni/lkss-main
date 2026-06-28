@@ -39,7 +39,7 @@ Schedule
      - Simona Toaca
 
    * - 01.07.2026, 16:30 - 20:00
-     - TODO
+     - :ref:`spi-bus-st7789-display`
      - Daniel Baluta
 
    * - 02.07.2026, 16:30 - 20:00
