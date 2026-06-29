@@ -3,7 +3,7 @@
 Introduction to the Linux Kernel
 ================================
 
-Slides: TODO
+Slides: :download:`here <../_static/content/slides/2026/slides_day1.pdf>`
 
 Theory
 ------
