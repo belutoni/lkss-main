@@ -363,7 +363,7 @@ callback runs in **interrupt context** and must not sleep.
    mod_timer(&my_timer, jiffies + HZ);   /* fire after 1 second */
 
    /* In exit/remove */
-   del_timer_sync(&my_timer);   /* waits for any running callback to finish */
+   timer_delete_sync(&my_timer);   /* waits for any running callback to finish */
 
 ``jiffies`` is the kernel tick counter. ``HZ`` is the number of ticks per second
 so ``jiffies + HZ`` means "one second from now".
@@ -983,7 +983,7 @@ e. Re-arm the timer for another one-second tick.
 
 In ``api_demo_exit()``:
 
-1. Stop the timer with ``del_timer_sync()`` *before* touching the memory the
+1. Stop the timer with ``timer_delete_sync()`` *before* touching the memory the
    callback uses – this guarantees no callback runs after this point.
 2. Free ``g_demo`` with ``kfree()``.
 
