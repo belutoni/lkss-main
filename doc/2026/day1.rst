@@ -645,7 +645,7 @@ Lab Exercises
 
    #. Compile the module and copy them to rootfs
 
-      ``$ ./scripts/lkss.py compile --install modules``
+      ``$ ./scripts/lkss.py compile --install-modules``
 
    #. In a separate terminal open the serial console
 
