@@ -505,7 +505,7 @@ value.
 .. hint::
    For the elapsed time, use the start time and the jiffies.
 
-- Look in ``mytimer_init`` and ``mytimer_destroy``. Here we initialize/destroy the timer and perform the misc device registration. Similarly to the previous exercise, create the misc device and pass it to ``misc_register``.
+- Look in ``mytimer_init`` and ``mytimer_destroy``. Here we initialize/destroy the timer and perform the misc device registration. Declare ``struct miscdevice`` and use ``misc_register`` to register it with the kernel and ``misc_unregister`` to unregister it.
 - Build the module and boot the board
 - Write multiple values to ``/dev/mytimer`` and observe. Keep in mind that these should be in seconds.
 
