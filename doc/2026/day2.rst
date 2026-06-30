@@ -3,7 +3,7 @@
 Character Devices, GPIOs and IRQs
 ==================================
 
-Slides: :download:`here <../_static/content/slides/2026/Day 2 - Character Devices, GPIOs and IRQs.pdf>`
+Slides: :download:`here <../_static/content/slides/2026/slides_day2.pdf>`
 
 Theory
 ------
@@ -395,6 +395,8 @@ on the falling edge of the signal, things might look like this:
    :scale: 40 %
    :align: center
 
+   Signal bouncing, active low [#]_
+
 That jitter on the the signal is what produces the rapid succession of interrupts.
 To mitigate this, we can do software button debouncing (and yes, debouncing can also
 be done in the hardware). This is nothing complicated, the main idea is that we
@@ -496,7 +498,7 @@ value.
 
 .. note::
 
-   Think about the order in which you have to add the entries so that the list performs like a stack.
+   Think about the order in which you have to add the entries so that the list performs like a queue.
 
 - In ``dev_write``, get the message from the user and parse it. Check if the timer is still pending, and, if so, add the timeout to the list. If it is not pending, start it and save the time you started it. (Will use it later to tell how much time has elapsed).
 
@@ -647,6 +649,8 @@ Useful resources
 .. [#] Interrupt masking refers to deciding which interrupts are to be handled and
    which are to be ignored. While in an irq handler, all interrupts are masked.
    Interrupt masking can occur on CPU-level or interrupt-controller-level.
+
+.. [#] https://arduinoplcworld.blogspot.com/2023/06/arduino-button-debounce.html
 
 .. _Kernel List API: https://docs.kernel.org/core-api/list.html
 
