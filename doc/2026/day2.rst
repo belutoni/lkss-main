@@ -455,12 +455,6 @@ through its device node ``/dev/simple_char`` and prints it to the kernel log
 
 - To test if everything is working correctly, use the :manpage:`cat(1)` and :manpage:`echo(1)` commands as shown **below**. Do you notice how it gets stuck? Think about what ``cat`` and the kernel driver are doing and explain why.
 
-- Try registering your device as a miscellaneous device - follow ``TODO 2``
-
-   .. hint::
-
-      See ``misc_register``, ``misc_unregister``, and ``struct miscdevice``.
-
 **Demo commands**
 
 .. code-block:: bash
