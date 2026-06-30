@@ -78,8 +78,12 @@ are generated. The API for registering/unregistering character devices is:
 
    int register_chrdev(unsigned int major, const char *name, const struct file_operations *fops);
    void unregister_chrdev(unsigned int major, const char *name);
+
    int register_chrdev_region(dev_t first, unsigned int count, char *name);
    void unregister_chrdev_region(dev_t first, unsigned int count);
+
+   /* wrapper over register_chrdev_region */
+   int alloc_chrdev_region(dev_t *dev, unsigned baseminor, unsigned count, const char *name);
 
 As you can see, ``register_chrdev`` takes the major, a unique name and the file
 operations. If you pass 0 as the major, a valid major is assigned automatically
@@ -126,6 +130,12 @@ file:
    struct device * device_create(const struct class *cls, struct device *parent, dev_t devt, void *drvdata, const char *fmt, ...);
    void device_destroy(const struct class *cls, dev_t devt);
 
+
+**Key takeaway - order of operations**:
+
+- register/alloc chrdev/region
+- if using regions -> use cdev_init() + cdev_add(), otherwise skip this step
+- class_create() + device_create() OR mknod in userspace
 
 File representation in the kernel
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
