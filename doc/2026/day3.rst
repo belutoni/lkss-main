@@ -3,7 +3,7 @@
 SPI Bus and the ST7789 Display
 ==============================
 
-Slides: TODO
+Slides: :download:`here <../_static/content/slides/2026/slides_day3.pdf>`
 
 Theory
 ------
