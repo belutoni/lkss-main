@@ -298,6 +298,9 @@ Where we need to reset the chip by drive RESX LOW > 15 ms, then HIGH; wait > 120
        msleep(150);                        /* wait> 120 ms before cmds */
    }
 
+
+.. _st7789-minimal-init:
+
 And them perform minimal initializaton sequence as below:
 
 .. code-block:: c
@@ -364,6 +367,9 @@ Essential ST7789 Commands
 +----------------+--------+--------+-------------------------------------------------------+
 | **NVGAMCTRL**  | 0xE1   | 14     | Negative voltage gamma control curve.                 |
 +----------------+--------+--------+-------------------------------------------------------+
+
+
+.. _st7789-complete-init:
 
 Complete initialization function:
 
@@ -987,16 +993,21 @@ theory section and answer:
 6. Initialization Sequence
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-**Reference**: :ref:`Theory Part 5 <st7789-part5>` complete initialization function.
+**Reference**: Look at :ref:`ST7789 initialization sequence <st7789-minimal-init>`
+in order to do perform minimal display init.
 
-Open ``st7789.c`` and find ``TODO 6``.  Copy the full **HSD20_IPS**
-initialization sequence from the theory section.  The sequence configures
-PORCTRL, GCTRL, VCOMS, VDVVRHEN, VRHS, VDVS, VCMOFSET, PWCTRL1,
-PVGAMCTRL, and NVGAMCTRL for correct colour and contrast.
+Open ``st7789.c`` and find ``TODO 6``.  Copy the minimal ``st7789_init_display``
+initialization sequence from the theory section. The sequence should be enough
+for simple primitives.
+
+When switching to more complex scence please use the
+:ref:`complete initialization sequence <st7789-complete-init>`. It configures PORCTRL,
+GCTRL, VCOMS, VDVVRHEN, VRHS, VDVS, VCMOFSET, PWCTRL1, PVGAMCTRL, and NVGAMCTRL
+for correct colour and contrast.
 
 **Test**: After implementing exercises 4–6, rebuild and reload the module.
 The display should wake up.  The color cycle (exercise 7) will confirm
-vivid red, green, and blue once ``fill()`` is implemented.
+red, green, and blue once ``fill()`` is implemented.
 
 ----
 
