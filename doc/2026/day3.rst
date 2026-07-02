@@ -122,10 +122,10 @@ CPOL and CPHA combine into four modes:
 | 0    | 1    | Mode 1 | SCKL idles **low**, shifted on rising edge, sampled on    |
 |      |      |        | **falling** edge.                                         |
 +------+------+--------+-----------------------------------------------------------+
-| 1    | 0    | Mode 2 | SCKL idles **high**, shifted on falling edge, sampled on  |
+| 1    | 0    | Mode 2 | SCKL idles **high**, shifted on rising edge, sampled on   |
 |      |      |        | **falling** edge.                                         |
 +------+------+--------+-----------------------------------------------------------+
-| 1    | 1    | Mode 3 | SCKL idles **high**, shifted on rising edge, sampled on   |
+| 1    | 1    | Mode 3 | SCKL idles **high**, shifted on falling edge, sampled on  |
 |      |      |        | **rising** edge.                                          |
 +------+------+--------+-----------------------------------------------------------+
 
