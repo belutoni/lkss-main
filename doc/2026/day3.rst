@@ -87,7 +87,7 @@ the level when the clock is idle (when the bus is not transferring data).
 
 - **CPOL=0**, SCLK idles **LOW**. The first clock transition after CS
   asserts is therefore a *rising* edge.
-- **CPOL=1**, SCKL idles **HIGH**. The first clock transition after CS
+- **CPOL=1**, SCLK idles **HIGH**. The first clock transition after CS
   asserts is therefore a *falling* edge.
 
 
@@ -116,16 +116,16 @@ CPOL and CPHA combine into four modes:
 +------+------+--------+-----------------------------------------------------------+
 | CPOL | CPHA | Mode   | Behaviour                                                 |
 +======+======+========+===========================================================+
-| 0    | 0    | Mode 0 | SCKL idles **low**, shifted on falling edge, sampled on   |
+| 0    | 0    | Mode 0 | SCLK idles **low**, shifted on falling edge, sampled on   |
 |      |      |        | **rising** edge. Default in Linux                         |
 +------+------+--------+-----------------------------------------------------------+
-| 0    | 1    | Mode 1 | SCKL idles **low**, shifted on rising edge, sampled on    |
+| 0    | 1    | Mode 1 | SCLK idles **low**, shifted on rising edge, sampled on    |
 |      |      |        | **falling** edge.                                         |
 +------+------+--------+-----------------------------------------------------------+
-| 1    | 0    | Mode 2 | SCKL idles **high**, shifted on rising edge, sampled on   |
+| 1    | 0    | Mode 2 | SCLK idles **high**, shifted on rising edge, sampled on   |
 |      |      |        | **falling** edge.                                         |
 +------+------+--------+-----------------------------------------------------------+
-| 1    | 1    | Mode 3 | SCKL idles **high**, shifted on falling edge, sampled on  |
+| 1    | 1    | Mode 3 | SCLK idles **high**, shifted on falling edge, sampled on  |
 |      |      |        | **rising** edge.                                          |
 +------+------+--------+-----------------------------------------------------------+
 
